@@ -111,5 +111,25 @@ namespace TaskList.BLL
             this.DefineStatus(entidade, StatusTarefa.Pendente);
             this.Atualizar(entidade);
         }
+
+        /// <summary>
+        /// Retornar se a tarefa foi concluida
+        /// </summary>
+        /// <param name="entidade"></param>
+        /// <returns></returns>
+        public bool TarefaConcluida(Tarefa entidade)
+        {
+            return (entidade != null && entidade.Status == StatusTarefa.Concluido);
+        }
+
+        /// <summary>
+        /// Retorna se a tarefa foi excluída
+        /// </summary>
+        /// <param name="entidade"></param>
+        /// <returns></returns>
+        public bool TarefaExcluida(Tarefa entidade)
+        {
+            return (entidade != null && entidade.Status == StatusTarefa.Excluido);
+        }
     }
 }

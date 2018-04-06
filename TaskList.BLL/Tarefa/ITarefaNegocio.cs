@@ -30,6 +30,20 @@ namespace TaskList.BLL
         /// Reabre uma tarefa concluída
         /// </summary>
         /// <param name="entidade"></param>
-        void Reabrir(Tarefa entidade);        
+        void Reabrir(Tarefa entidade);
+
+        /// <summary>
+        /// Retorna se uma tarefa está concluída
+        /// </summary>
+        /// <param name="entidade"></param>
+        /// <returns></returns>
+        bool TarefaConcluida(Tarefa entidade);
+
+        /// <summary>
+        /// Retornar se uma tarefa foi excluída
+        /// </summary>
+        /// <param name="entidade"></param>
+        /// <returns></returns>
+        bool TarefaExcluida(Tarefa entidade);
     }
 }

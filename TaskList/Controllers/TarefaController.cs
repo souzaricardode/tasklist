@@ -81,6 +81,13 @@ namespace TaskList.Controllers
             }
 
             var entidade = negocio.ObterPorId(id.Value);
+
+            if (negocio.TarefaConcluida(entidade) || negocio.TarefaExcluida(entidade))
+            {
+                TempData["Sucesso"] = "Não é possivel editar uma tarefa concluída ou excluída.";
+                return RedirectToAction("Index");
+            }
+
             var entidadeDto = Mapper.Map<Tarefa, TarefaDto>(entidade);
             if (entidadeDto == null)
             {
@@ -127,6 +134,13 @@ namespace TaskList.Controllers
             try
             {
                 var entidade = negocio.ObterPorId(id.Value);
+
+                if (negocio.TarefaExcluida(entidade))
+                {
+                    TempData["Sucesso"] = "Não é possivel concluir uma tarefa excluída.";
+                    return RedirectToAction("Index");
+                }
+
                 negocio.Concluir(entidade);
 
                 TempData["Sucesso"] = ResourceMensagens.MENSAGEM_OPERACAO_REALIZADA_COM_SUCESSO;
@@ -155,6 +169,13 @@ namespace TaskList.Controllers
             try
             {
                 var entidade = negocio.ObterPorId(id.Value);
+
+                if (negocio.TarefaExcluida(entidade))
+                {
+                    TempData["Sucesso"] = "Não é possivel concluir uma tarefa excluída.";
+                    return RedirectToAction("Index");
+                }
+
                 negocio.Reabrir(entidade);
 
                 TempData["Sucesso"] = ResourceMensagens.MENSAGEM_OPERACAO_REALIZADA_COM_SUCESSO;
