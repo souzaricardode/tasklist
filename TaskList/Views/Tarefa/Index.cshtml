@@ -1,0 +1,56 @@
+﻿@model IList<TaskList.Model.Dto.TarefaDto>
+@using TaskList.Model.Resources
+@using GridMvc.Html
+
+@{
+    ViewBag.Title = ResourceComponentes.TITULO_TELA_LISTAGEM_TAREFA;
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<br/>
+
+<h2>@ViewBag.Title</h2>
+
+<div class="page-header">
+    <div class="btn-toolbar pull-right">
+        <br />
+        <a href="@Url.Action("Criar")" class="btn btn-success">
+            <span class="fa fa-plus"></span> @ResourceComponentes.BOTAO_NOVO
+        </a>
+    </div>
+</div>
+<br />
+@Html.Partial("_PartialTempMensagens")
+
+@if (@Model.Any())
+{
+    @Html.Grid(Model).Columns(columns =>
+{
+    columns.Add(c => c.Id).Titled("Id");
+    columns.Add().Encoded(false).Sanitized(false).RenderValueAs(c => (c.Status == TaskList.Model.Enum.StatusTarefa.Excluido ?
+                                                                                    Html.Raw("<strike color:red>" + c.Descricao + "</strike>") :
+                                                                                    Html.Raw(c.Descricao)))
+                    .Sortable(true)
+                    .Titled("Descrição");
+    columns.Add().Encoded(false).Sanitized(false).RenderValueAs(c => c.Status.Descricao())
+                    .Sortable(true)
+                    .Titled("Status");
+    columns.Add(c => c.DataCriacao).Titled("Data Criação");
+    columns.Add(c => c.DataAlteracao).Titled("Data Alteração");
+    columns.Add(c => c.DataExclusao).Titled("Data Exclusão");
+    columns.Add().Encoded(false).Sanitized(false).SetWidth(150).RenderValueAs(c => c.Status == TaskList.Model.Enum.StatusTarefa.Excluido ?
+                                                                                    Html.Raw("") :
+                                                                                    Html.Raw("<div class=\"btn-group\">" +
+                                                                                     Html.EditButton("", @Url.Action("Editar"), c.Id) +
+                                                                                     Html.DeleteButton("", @Url.Action("Excluir"), c.Id) +
+                                                                                      (c.Status == TaskList.Model.Enum.StatusTarefa.Concluido ?
+                                                                                        Html.ReopenButton("", @Url.Action("Reabrir"), c.Id) :
+                                                                                        Html.ConcludeButton("", @Url.Action("Concluir"), c.Id)) + "</div>"));
+
+
+}).WithPaging(50).Sortable(true).Filterable(true)
+}
+    else
+    {
+    <p>@ResourceMensagens.MENSAGEM_NENHUM_REGISTRO_ENCONTRADO</p>
+}
